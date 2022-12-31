@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+clojure -M -m skim.core "$@"

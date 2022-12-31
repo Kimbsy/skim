@@ -1,0 +1,6 @@
+(bind (a 1
+       b 3)
+      (bind
+       (plus-b (func (a)
+                     (+ a b)))
+       (plus-b 10)))
