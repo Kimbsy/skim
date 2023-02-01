@@ -62,20 +62,21 @@
        (symbol? e) (get env e)
 
        :else :NONE-ATOM)
-     (cond
+
+     (case (first e)
        ;; quote
-       (= 'quote (first e)) (second e)
+       quote (second e)
 
        ;; if
-       (= 'if (first e)) (if (evaluate (nth e 1) env)
+       if (if (evaluate (nth e 1) env)
                            (evaluate (nth e 2) env)
                            (evaluate (nth e 3) env))
 
        ;; lambda
-       (= 'func (first e)) (make-fn (nth e 1) (nth e 2) env)
+       func (make-fn (nth e 1) (nth e 2) env)
 
        ;; let
-       (= 'bind (first e)) (let [[names values] (->> (nth e 1)
+       bind (let [[names values] (->> (nth e 1)
                                                      (partition 2)
                                                      (apply map list))]
                              (evaluate (nth e 2)
@@ -84,11 +85,9 @@
                                         names
                                         (evlist values env))))
 
-       ;; apply function
-       (seq e) (invoke (evaluate (first e) env)
-                       (evlist (rest e) env))
-
-       :else :NONE-COLL))))
+       ;; default is function application
+       (invoke (evaluate (first e) env)
+                       (evlist (rest e) env))))))
 
 (def eval-string (comp evaluate read-string))
 
