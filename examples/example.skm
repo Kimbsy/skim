@@ -1,0 +1,35 @@
+;; Need to define some commonly used functions
+(bind (+ (func (a b)
+               (- a (- b)))
+
+       not (func (e)
+                 (nand true e))
+
+       and (func (a b)
+                 (not (nand a b)))
+
+       or (func (a b)
+                (nand (not a)
+                      (not b)))
+
+       <= (func (a b)
+                (or (< a b)
+                    (= a b)))
+
+       > (func (a b)
+               (and (not (= a b))
+                    (not (< a b))))
+
+       >= (func (a b)
+                (or (> a b)
+                    (= a b))))
+
+
+      (bind (a 13
+             b (+ a 10)
+             c (if (or (< b a)
+                       (>= 50 (+ b a)))
+                 200
+                 1000))
+
+            (- c (+ a b))))
