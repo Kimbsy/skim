@@ -1,4 +1,5 @@
-;; Defining basic functions
+;;;; Commonly used functions
+
 (bind (not (func (e)
                  (nand true e))
 
@@ -6,8 +7,8 @@
                  (not (nand a b)))
 
        or (func (a b)
-                (nand (not a)
-                      (not b)))
+                    (nand (not a)
+                          (not b)))
 
        + (func (a b)
                (- a (- b)))
@@ -35,12 +36,6 @@
                     (= a b))))
 
 
-      ;; Actual code (second `bind` form not necessary, but helps clarity)
-      (bind (a 13
-             b (+ a 10)
-             c (if (or (<= b a)
-                       (>= 50 (+ b a)))
-                 200
-                 1000))
+      ;; etc ...
 
-            (+ c (* a b))))
+      )

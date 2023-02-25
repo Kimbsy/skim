@@ -28,10 +28,15 @@
           (zipmap names values)))
 
 (defn make-fn
+  "Creates a function which has an implicit reference to itself bound to
+  the symbol `recur`."
   [args body env]
-  (fn [& values]
-    ;; this should be an `eprogn`, unless we only allow a single form as body?
-    (evaluate body (extend-env env args values))))
+  (let [fenv (atom env)
+        f (fn [& values]
+            ;; this should be an `eprogn`, unless we only allow a single form as body?
+            (evaluate body (extend-env @fenv args values)))]
+    (swap! fenv #(assoc % 'recur f))
+    f))
 
 (defn invoke
   [f args]
@@ -75,7 +80,7 @@
 
        ;; default to function application
        (invoke (evaluate (first e) env)
-                       (evlist (rest e) env))))))
+               (evlist (rest e) env))))))
 
 (def eval-string (comp evaluate read-string))
 
