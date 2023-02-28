@@ -1,4 +1,4 @@
-;;;; Implementation of `max` function.
+;;;; Implementation of `count` and `max` functions.
 
 (bind (not (func (e)
                  (nand true e))
@@ -35,11 +35,20 @@
                 (or (> a b)
                     (= a b))))
 
-      (bind (numbers (quote (3 1 9 7 5))
+      ;; You can create a list with either `quote` or `cons`
+      (bind (odds (quote (3 1 9 7 5))
+             evens (cons 2 (cons 8 (cons 4 (cons 6 nil))))
+
+             count (func (values)
+                         (bind (f (func (vs c)
+                                        (if (= vs (quote ()))
+                                          c
+                                          (recur (rest vs) (+ 1 c)))))
+                               (f values 0)))
 
              max (func (values)
                        (bind (f (func (vs current-max)
-                                      (if (= vs (quote ()))
+                                      (if (= 0 (count vs))
                                         current-max
                                         (bind (head (first vs)
                                                     tail (rest vs))
@@ -48,4 +57,5 @@
                                                 (recur tail current-max))))))
                              (f values (first values)))))
 
-            (max numbers)))
+            (+ (count evens)
+               (max odds))))
