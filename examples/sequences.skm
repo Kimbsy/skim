@@ -1,0 +1,51 @@
+;;;; Implementation of `max` function.
+
+(bind (not (func (e)
+                 (nand true e))
+
+       and (func (a b)
+                 (not (nand a b)))
+
+       or (func (a b)
+                (nand (not a)
+                      (not b)))
+
+       + (func (a b)
+               (- a (- b)))
+
+       * (func (a b)
+               (if (or (= a 0)
+                       (= b 0))
+                 0
+                 (if (= b 1)
+                   a
+                   (if (= a 1)
+                     b
+                     (+ a (recur a (- b 1)))))))
+
+       <= (func (a b)
+                (or (< a b)
+                    (= a b)))
+
+       > (func (a b)
+               (and (not (= a b))
+                    (not (< a b))))
+
+       >= (func (a b)
+                (or (> a b)
+                    (= a b))))
+
+      (bind (numbers (quote (3 1 9 7 5))
+
+             max (func (values)
+                       (bind (f (func (vs current-max)
+                                      (if (= vs (quote ()))
+                                        current-max
+                                        (bind (head (first vs)
+                                                    tail (rest vs))
+                                              (if (< current-max head)
+                                                (recur tail head)
+                                                (recur tail current-max))))))
+                             (f values (first values)))))
+
+            (max numbers)))

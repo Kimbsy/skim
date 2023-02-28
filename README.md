@@ -48,7 +48,17 @@ Clojure is our definitional language so comments are preceded with any number of
 
 # Initial environment
 
-We have an intentionally minimal initial environment, the only functions that exist as part of the language definition are `-`, `=`, `<` and `nand` as these are sufficient to implement most required arithmetic or boolean functions (see `examples/core.skm`).
+We have an intentionally minimal initial environment:
+
+- For arithmetic we start with just the `-` function, as it can be used to create `+`, `*` and `/`.
+
+- For boolean logic we start with just the `nand` function, as it can be used to emulate the other primitive boolean functions `not`, `and` and `or`.
+
+- For numerical comparision we just have `<` and `=`, creating other comparison operators is achieved by combining these with the boolean functions.
+
+- For sequences we have `cons`, `first` and `rest`.
+
+See `examples/core.skm` for implementation examples.
 
 # Recursion
 
@@ -72,6 +82,5 @@ Inside the lambda form `func` is an implicitly available binding `recur`.
 
 # TODO:
 
-- think about lists, conj/cons, car/cadr/first/rest etc.
 - can we define a `core.skm` with common functions written in skim? Would need the ability to import libraries? some kind of `ns`-like special form?
 - can we create an emacs mode with correct indentation rules?

@@ -12,20 +12,32 @@
   {'- -
    '= =
    '< <
-   'nand (fn [a b] (not (and a b)))})
+   'nand (fn [a b] (not (and a b)))
+   'cons cons
+   'first first
+   'rest rest})
 
 (declare evaluate)
 
-(defn extend-env
+(defn extend-env-iterative-eval
   "Extend the environment by binding `names` to `values`.
 
-  Evaluate expressions one by one, so we can refer to previous names
-  in the same bind form."
+  `value` expressions have not been evaluated as they may refer to
+  previous `names`. Each must be evaluated, then used to extend the
+  environment before the next can be evaluated."
   [env names values]
   (reduce (fn [e [n v]]
             (assoc e n (evaluate v e)))
           env
           (zipmap names values)))
+
+(defn extend-env
+  "Extend the environment with by binding `names` to `values`.
+
+  `value` expressions have already been evaluated."
+  [env names values]
+  (merge env
+         (zipmap names values)))
 
 (defn make-fn
   "Creates a function which has an implicit reference to itself bound to
@@ -33,7 +45,6 @@
   [args body env]
   (let [fenv (atom env)
         f (fn [& values]
-            ;; this should be an `eprogn`, unless we only allow a single form as body?
             (evaluate body (extend-env @fenv args values)))]
     (swap! fenv #(assoc % 'recur f))
     f))
@@ -76,7 +87,7 @@
                                       (partition 2)
                                       (apply map list))]
               (evaluate (nth e 2)
-                        (extend-env env names values)))
+                        (extend-env-iterative-eval env names values)))
 
        ;; default to function application
        (invoke (evaluate (first e) env)
