@@ -50,15 +50,15 @@ Clojure is our definitional language so comments are preceded with any number of
 
 We have an intentionally minimal initial environment:
 
-- For arithmetic we start with just the `-` function, as it can be used to create `+`, `*` and `/`.
+- For arithmetic we start with just the `-` function, as it can be used to create `+`, `*`, `/` and `%`.
 
 - For boolean logic we start with just the `nand` function, as it can be used to emulate the other primitive boolean functions `not`, `and` and `or`.
 
 - For numerical comparision we just have `<` and `=`, creating other comparison operators is achieved by combining these with the boolean functions.
 
-- For sequences we have `cons`, `first` and `rest`.
+- For sequences we have `cons`, `first` and `rest`, with these we can implement `map`, `filter`, `reduce` etc.
 
-See `examples/core.skm` for implementation examples.
+See the `examples` directory for implementation ideas.
 
 # Recursion
 

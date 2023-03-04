@@ -63,6 +63,15 @@
                                           (recur (rest vs) (+ 1 c)))))
                                (f values 0)))
 
+             map (func (mf xs)
+                       (bind (f (func (acc mf xs)
+                                      (if (= 0 (count xs))
+                                        acc
+                                        (bind (head (first xs)
+                                                    tail (rest xs))
+                                              (cons (mf head) (recur acc mf tail))))))
+                             (f (quote ()) mf xs)))
+
              filter (func (pf xs)
                           (bind (f (func (acc pf xs)
                                          (if (= 0 (count xs))
@@ -73,15 +82,6 @@
                                                    (cons head (recur acc pf tail))
                                                    (recur acc pf tail))))))
                                 (f (quote ()) pf xs)))
-
-             map (func (mf xs)
-                       (bind (f (func (acc mf xs)
-                                      (if (= 0 (count xs))
-                                        acc
-                                        (bind (head (first xs)
-                                               tail (rest xs))
-                                              (cons (mf head) (recur acc mf tail))))))
-                             (f (quote ()) mf xs)))
 
              divisors (func (n)
                             (bind (possibles (range (/ n 2)))

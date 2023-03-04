@@ -66,6 +66,13 @@
                                               (cons (mf head) (recur acc mf tail))))))
                              (f (quote ()) mf xs)))
 
+             reduce (func (rf acc xs)
+                          (if (= 0 (count xs))
+                            acc
+                            (bind (head (first xs)
+                                   tail (rest xs))
+                                  (recur rf (rf acc head) tail))))
+
              max (func (values)
                        (bind (f (func (vs current-max)
                                       (if (= 0 (count vs))
@@ -77,5 +84,5 @@
                                                 (recur tail current-max))))))
                              (f values (first values)))))
 
-            (+ (count (filter (func (n) (* n n)) evens))
+            (+ (reduce * 1 (filter (func (n) (* n n)) evens))
                (max (map (func (n) (+ n 2)) odds)))))

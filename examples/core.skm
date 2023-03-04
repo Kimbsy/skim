@@ -30,6 +30,13 @@
                    0
                    (+ 1 (recur (- a b) b)))))
 
+       % (func (a b)
+               (if (= a b)
+                 0
+                 (if (< a b)
+                   a
+                   (recur (- a b) b))))
+
        <= (func (a b)
                 (or (< a b)
                     (= a b)))
