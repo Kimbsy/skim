@@ -23,6 +23,13 @@
                      b
                      (+ a (recur a (- b 1)))))))
 
+       / (func (a b)
+               (if (= b 0)
+                 ##Inf
+                 (if (< a b)
+                   0
+                   (+ 1 (recur (- a b) b)))))
+
        <= (func (a b)
                 (or (< a b)
                     (= a b)))
@@ -36,6 +43,5 @@
                     (= a b))))
 
 
-      ;; etc ...
-
-      )
+      ;; need to do something for the `bind` form to be valid.
+      (= true true))
