@@ -29,7 +29,7 @@
   (reduce (fn [e [n v]]
             (assoc e n (evaluate v e)))
           env
-          (zipmap names values)))
+          (map list names values)))
 
 (defn extend-env
   "Extend the environment with by binding `names` to `values`.
