@@ -1,6 +1,6 @@
 # skim
 
-A toy Lisp written in Clojure.
+This is skim, a toy Lisp written in Clojure.
 
 # Usage
 
@@ -57,6 +57,8 @@ We have an intentionally minimal initial environment:
 - For numerical comparision we just have `<` and `=`, creating other comparison operators is achieved by combining these with the boolean functions.
 
 - For sequences we have `cons`, `first` and `rest`, with these we can implement `map`, `filter`, `reduce` etc.
+
+- Finally we have `coll?` and `symbol?` which are included specifically to allow you to implement your own Lisp in skim.
 
 See the `examples` directory for implementation ideas.
 

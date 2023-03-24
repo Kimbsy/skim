@@ -5,7 +5,8 @@
     java.lang.Character
     java.lang.Long
     java.lang.Double
-    java.lang.Boolean})
+    java.lang.Boolean
+    clojure.lang.Keyword})
 
 ;; minimal initial environment
 (def initial-env
@@ -15,7 +16,9 @@
    'nand (fn [a b] (not (and a b)))
    'cons cons
    'first first
-   'rest rest})
+   'rest rest
+   'coll? coll?
+   'symbol? symbol?})
 
 (declare evaluate)
 

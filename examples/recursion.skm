@@ -1,0 +1,37 @@
+(bind (not (func (e)
+                 (nand true e))
+
+       or (func (a b)
+                    (nand (not a)
+                          (not b)))
+
+       + (func (a b)
+               (- a (- b)))
+
+       * (func (a b)
+               (if (or (= a 0)
+                       (= b 0))
+                 0
+                 (if (= b 1)
+                   a
+                   (if (= a 1)
+                     b
+                     (+ a (recur a (- b 1))))))))
+
+      ;; Defining the Y Combinator allows for the creation of
+      ;; recursive functions.
+
+      (bind (Y (func (f)
+                     ((func (x)
+                            (x x))
+                      (func (x)
+                            (f (func (y)
+                                     ((x x) y))))))
+
+             fact (Y (func (f)
+                           (func (n)
+                                 (if (= n 0)
+                                   1
+                                   (* n (f (- n 1))))))))
+
+            (fact 5)))

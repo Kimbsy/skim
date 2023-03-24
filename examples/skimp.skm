@@ -1,0 +1,139 @@
+;;;; This is skimp, a toy Lisp written in skim
+
+(bind (;;-----------------------------;;
+       ;; --== UTILITY FUNCTIONS ==-- ;;
+       ;;-----------------------------;;
+
+       not (func (e)
+                 (nand true e))
+
+       or (func (a b)
+                (nand (not a)
+                      (not b)))
+
+       + (func (a b)
+               (- a (- b)))
+
+       * (func (a b)
+               (if (or (= a 0)
+                       (= b 0))
+                 0
+                 (if (= b 1)
+                   a
+                   (if (= a 1)
+                     b
+                     (+ a (recur a (- b 1)))))))
+
+       not (func (e)
+                 (nand true e))
+
+       nth (func (l n)
+                 (if (= n 0)
+                   (first l)
+                   (recur (rest l) (- n 1))))
+
+       count (func (values)
+                   (bind (f (func (vs c)
+                                  (if (= vs (quote ()))
+                                    c
+                                    (recur (rest vs) (+ 1 c)))))
+                         (f values 0)))
+
+       map (func (mf xs)
+                 (bind (f (func (acc mf xs)
+                                (if (= 0 (count xs))
+                                  acc
+                                  (bind (head (first xs)
+                                         tail (rest xs))
+                                        (cons (mf head) (recur acc mf tail))))))
+                       (f (quote ()) mf xs)))
+
+       ;;-----------------------;;
+       ;; --== ENVIRONMENT ==-- ;;
+       ;;-----------------------;;
+
+       ;; The environment is a function that takes a symbol to look
+       ;; up. Environment extension closes over previous environment.
+
+       empty-env (func (_) :SYMBOL_NOT_FOUND)
+
+       extend-env (func (env n v)
+                        (func (s)
+                              (if (= s n)
+                                v
+                                (env s))))
+
+       initial-env (extend-env
+                    (extend-env
+                     (extend-env
+                      empty-env
+                      (quote -) (func (a) (func (b) (- a b))))
+                     (quote *) (func (a) (func (b) (* a b))))
+                    (quote =) (func (a) (func (b) (= a b))))
+
+       ;;---------------------;;
+       ;; --== EVALUATOR ==-- ;;
+       ;;---------------------;;
+
+       ev (func (e env)
+                (bind (ev recur)
+                      (if (not (coll? e))
+                        ;; eval an atom
+                        (if (symbol? e)
+                          ;; symbol lookup
+                          (env e)
+                          ;; self-evaluating
+                          e)
+
+                        ;; eval a list
+                        (bind (head (first e)
+                               tail (rest e))
+                              ;; quote
+                              (if (= head (quote quote))
+                                (nth e 1)
+
+                                ;; @NOTE: do we need if? can we just use K and KI combinators?
+                                ;; if
+                                (if (= head (quote if))
+                                  (if (ev (nth e 1) env)
+                                    (ev (nth e 2) env)
+                                    (ev (nth e 3) env))
+
+                                  ;; lambda
+                                  (if (= head (quote λ))
+                                    (func (val)
+                                          (ev (nth e 2) (extend-env env (nth e 1) val)))
+
+                                    ;; default to unary function application
+                                    ((ev (first e) env)
+                                     (ev (nth e 1) env))))))))))
+
+      ;;----------------------------------------;;
+      ;; --== INTERPRETING A SKIMP PROGRAM ==-- ;;
+      ;;----------------------------------------;;
+
+      (ev (quote
+
+           ;; Calculate the factorial of 5 using the Y Combinator to
+           ;; implement recursion.
+
+           (((λ Y
+                ;; factorial function
+                (Y (λ fact
+                      (λ n
+                         (if ((= n) 0)
+                           1
+                           ((* n) (fact ((- n) 1))))))))
+
+             ;; Y Combinator
+             (λ f
+                ((λ x (x x))
+                 (λ x
+                    (f (λ y
+                          ((x x) y)))))))
+
+            ; applied to 5
+            5)
+
+           )
+          initial-env))
