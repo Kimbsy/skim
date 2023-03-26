@@ -1,0 +1,20 @@
+(bind (comp (func (f g)
+                  (func (a)
+                        (f (g a))))
+
+       juxt (func (f g)
+                  (func (a)
+                        (cons (f a)
+                              (cons (g a)
+                                    nil))))
+
+       f (func (a)
+               (- a 1))
+
+       g (func (a)
+               (- 0 a))
+
+       fog (comp f g)
+       jfg (juxt f g))
+
+      (jfg (fog 10)))
