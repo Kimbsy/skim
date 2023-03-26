@@ -84,5 +84,4 @@ Inside the lambda form `func` is an implicitly available binding `recur`.
 
 # TODO:
 
-- can we define a `core.skm` with common functions written in skim? Would need the ability to import libraries? some kind of `ns`-like special form?
 - can we create an emacs mode with correct indentation rules?

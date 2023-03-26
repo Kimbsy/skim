@@ -24,9 +24,6 @@
                      b
                      (+ a (recur a (- b 1)))))))
 
-       not (func (e)
-                 (nand true e))
-
        nth (func (l n)
                  (if (= n 0)
                    (first l)
@@ -132,7 +129,7 @@
                     (f (λ y
                           ((x x) y)))))))
 
-            ; applied to 5
+            ;; applied to 5
             5)
 
            )
