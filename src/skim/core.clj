@@ -35,7 +35,7 @@
           (map list names values)))
 
 (defn extend-env
-  "Extend the environment with by binding `names` to `values`.
+  "Extend the environment by binding `names` to `values`.
 
   `value` expressions have already been evaluated."
   [env names values]
